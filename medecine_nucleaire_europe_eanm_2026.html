@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: #B5C4B5;
+  padding: 24px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 920px;
+  margin: 0 auto;
+  background: #F5F0E6;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+
+h1 {
+  color: #2A2A2A;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #4A4A4A;
+  font-size: 15px;
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.source {
+  text-align: center;
+  color: #6A6A6A;
+  font-size: 12px;
+  margin-bottom: 28px;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.interactive-hint {
+  background: linear-gradient(135deg, #4A7C6F 0%, #5B8D7E 100%);
+  padding: 12px 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 24px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.interactive-hint-text {
+  color: #F5F0E6;
+  font-size: 13px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 600;
+}
+
+.phase-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.phase-btn {
+  padding: 16px 12px;
+  border: 2px solid #E2DCD0;
+  border-radius: 12px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.phase-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  transition: all 0.3s;
+}
+
+.phase-btn.present {
+  background: #E8F5E9;
+  color: #2E7D32;
+  border-color: #C8E6C9;
+}
+
+.phase-btn.present::before {
+  background: #2E7D32;
+}
+
+.phase-btn.challenges {
+  background: #FFF8E1;
+  color: #F57C00;
+  border-color: #FFECB3;
+}
+
+.phase-btn.challenges::before {
+  background: #F57C00;
+}
+
+.phase-btn.priorities {
+  background: #FFF3E0;
+  color: #C9A84C;
+  border-color: #FFE0B2;
+}
+
+.phase-btn.priorities::before {
+  background: #C9A84C;
+}
+
+.phase-btn.vision {
+  background: #E3F2FD;
+  color: #1976D2;
+  border-color: #BBDEFB;
+}
+
+.phase-btn.vision::before {
+  background: #1976D2;
+}
+
+.phase-btn.active {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.phase-btn.active::before {
+  height: 100%;
+  opacity: 0.1;
+}
+
+.phase-btn:hover:not(.active) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.phase-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.phase-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #E2DCD0;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #4A7C6F;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #4A4A4A;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.stat-context {
+  font-size: 11px;
+  color: #6A6A6A;
+  margin-top: 4px;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.section {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #E2DCD0;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  color: #4A7C6F;
+  font-size: 14px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.challenge-card {
+  background: #F5F0E6;
+  padding: 16px;
+  border-radius: 10px;
+  border-left: 3px solid #F57C00;
+}
+
+.challenge-icon {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.challenge-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2A2A2A;
+  margin-bottom: 4px;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.challenge-desc {
+  font-size: 12px;
+  color: #4A4A4A;
+  line-height: 1.5;
+}
+
+.priority-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.priority-item {
+  background: #F5F0E6;
+  padding: 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-left: 3px solid #C9A84C;
+}
+
+.priority-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #C9A84C;
+  color: #F5F0E6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.priority-content {
+  flex: 1;
+}
+
+.priority-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2A2A2A;
+  margin-bottom: 4px;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.priority-desc {
+  font-size: 13px;
+  color: #4A4A4A;
+  line-height: 1.6;
+}
+
+.timeline {
+  position: relative;
+  padding: 20px 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 40px;
+  top: 40px;
+  bottom: 40px;
+  width: 2px;
+  background: #E2DCD0;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 80px;
+  margin-bottom: 24px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 32px;
+  top: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4A7C6F;
+  border: 3px solid #F5F0E6;
+}
+
+.timeline-year {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4A7C6F;
+  font-family: 'Source Sans 3', sans-serif;
+  margin-bottom: 6px;
+}
+
+.timeline-text {
+  font-size: 13px;
+  color: #2A2A2A;
+  line-height: 1.6;
+}
+
+.vision-card {
+  background: linear-gradient(135deg, #1976D2 0%, #2196F3 100%);
+  padding: 28px;
+  border-radius: 12px;
+  color: #fff;
+}
+
+.vision-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.vision-text {
+  font-size: 14px;
+  line-height: 1.7;
+  opacity: 0.95;
+}
+
+.key-quote {
+  background: #F5F0E6;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #C9A84C;
+  margin-top: 20px;
+}
+
+.key-quote-text {
+  font-size: 15px;
+  color: #2A2A2A;
+  line-height: 1.8;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .challenge-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .phase-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Médecine nucléaire européenne — horizon 2030</h1>
+  <p class="subtitle">Rapport EANM 2026 : état des lieux, défis, priorités stratégiques</p>
+  <p class="source">Source : EANM EU Policy & Projects — Overarching Narrative 2026</p>
+
+  <div class="interactive-hint">
+    <div class="interactive-hint-text">👆 Cliquez sur les onglets colorés ci-dessous pour explorer chaque dimension</div>
+  </div>
+
+  <div class="phase-selector">
+    <button class="phase-btn present active" onclick="showPhase('present', this)">
+      <div class="phase-label">État</div>
+      <div class="phase-title">Actuel</div>
+    </button>
+    <button class="phase-btn challenges" onclick="showPhase('challenges', this)">
+      <div class="phase-label">Les</div>
+      <div class="phase-title">Défis</div>
+    </button>
+    <button class="phase-btn priorities" onclick="showPhase('priorities', this)">
+      <div class="phase-label">Les</div>
+      <div class="phase-title">Priorités</div>
+    </button>
+    <button class="phase-btn vision" onclick="showPhase('vision', this)">
+      <div class="phase-label">La</div>
+      <div class="phase-title">Vision</div>
+    </button>
+  </div>
+
+  <div id="present-phase">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">10M</div>
+        <div class="stat-label">Procédures/an</div>
+        <div class="stat-context">Europe, +1 500 centres</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">~90%</div>
+        <div class="stat-label">Diagnostic</div>
+        <div class="stat-context">Bascule thérapeutique à venir</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Domaines clés</div>
+        <div class="stat-context">Oncologie · Cardio · Neuro</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">La révolution théranostique en cours</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div>
+          <div style="font-size: 14px; font-weight: 600; color: #2A2A2A; margin-bottom: 8px; font-family: 'Source Sans 3', sans-serif;">Le principe</div>
+          <div style="font-size: 13px; color: #4A4A4A; line-height: 1.6;">
+            Même vecteur moléculaire pour <strong>imager</strong> (sélectionner les patients) ET <strong>traiter</strong> (cibler les cellules malades). Médecine de précision incarnée.
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 600; color: #2A2A2A; margin-bottom: 8px; font-family: 'Source Sans 3', sans-serif;">Exemple paradigme</div>
+          <div style="font-size: 13px; color: #4A4A4A; line-height: 1.6;">
+            <span style="color: #4A7C6F; font-weight: 600;">⁶⁸Ga-PSMA</span> (diagnostic TEP) → <span style="color: #C9A84C; font-weight: 600;">¹⁷⁷Lu-PSMA</span> (thérapie ciblée) en cancer prostatique métastatique.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Innovations technologiques récentes</div>
+      <div class="timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">TEP longue axe (LAFOV)</div>
+          <div class="timeline-text">Sensibilité accrue, dose réduite, acquisitions dynamiques corps entier — déploiement limité aux centres pilotes</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">SPECT 3D détecteurs solides</div>
+          <div class="timeline-text">Résolution énergétique supérieure, doses réduites, performances quantitatives améliorées</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">Hybridation standard</div>
+          <div class="timeline-text">TEP/CT, TEP/IRM, SPECT/CT = configurations commerciales actuelles — fusion fonctionnel + anatomique</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="challenges-phase" style="display: none;">
+    <div class="section">
+      <div class="section-title">Défis structurels interconnectés</div>
+      <div class="challenge-grid">
+        <div class="challenge-card">
+          <div class="challenge-icon">⚖️</div>
+          <div class="challenge-title">Fragmentation réglementaire</div>
+          <div class="challenge-desc">Standards hétérogènes UE · Radiopharmaceutiques entre législation pharma et radioprotection · Incohérences</div>
+        </div>
+        <div class="challenge-card">
+          <div class="challenge-icon">👥</div>
+          <div class="challenge-title">Workforce insuffisante</div>
+          <div class="challenge-desc">Gaps de formation entre pays · Pénuries personnel qualifié · Mobilité professionnelle entravée</div>
+        </div>
+        <div class="challenge-card">
+          <div class="challenge-icon">🔗</div>
+          <div class="challenge-title">Supply chain fragile</div>
+          <div class="challenge-desc">Dépendance sources étrangères · Réacteurs vieillissants · Pénuries ⁹⁹Mo/⁹⁹ᵐTc récurrentes</div>
+        </div>
+        <div class="challenge-card">
+          <div class="challenge-icon">🏥</div>
+          <div class="challenge-title">Inégalités territoriales</div>
+          <div class="challenge-desc">Équipements inégaux entre États · Remboursements hétérogènes · Accès variable aux innovations</div>
+        </div>
+        <div class="challenge-card">
+          <div class="challenge-icon">💰</div>
+          <div class="challenge-title">Sous-financement R&D</div>
+          <div class="challenge-desc">Investissement insuffisant radiobiologie et dosimétrie personnalisée · Essais cliniques complexes</div>
+        </div>
+        <div class="challenge-card">
+          <div class="challenge-icon">📊</div>
+          <div class="challenge-title">Transformation numérique</div>
+          <div class="challenge-desc">IA · Données massives · Gouvernance · Infrastructures numériques à moderniser</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Cas d'école : pénurie ¹⁷⁷Lu-PSMA 2023</div>
+      <div style="background: #2A2A2A; padding: 16px; border-radius: 10px; color: #F5F0E6;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <div style="font-size: 24px;">⚠️</div>
+          <div style="font-size: 13px; font-family: 'Source Sans 3', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Le goulot n'était pas l'isotope</div>
+        </div>
+        <div style="font-size: 13px; line-height: 1.6; color: #B0B0B0;">
+          La pénurie n'était pas due à un manque d'isotope brut, mais à une <span style="color: #F5F0E6; font-weight: 600;">saturation des capacités de marquage</span>. L'AMM étant délivrée site par site, aucun transfert automatique n'est possible. Le maillon faible est réglementaire, pas réacteur.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="priorities-phase" style="display: none;">
+    <div class="section">
+      <div class="section-title">Les priorités politiques EANM</div>
+      <div class="priority-list">
+        <div class="priority-item">
+          <div class="priority-number">1</div>
+          <div class="priority-content">
+            <div class="priority-title">Moderniser la régulation</div>
+            <div class="priority-desc">Cadre dédié radiopharmaceutiques dans Pharma Law · Guidelines EMA adaptées · Production in-house simplifiée · Cohérence pharma-radioprotection</div>
+          </div>
+        </div>
+
+        <div class="priority-item">
+          <div class="priority-number">2</div>
+          <div class="priority-content">
+            <div class="priority-title">Sécuriser l'approvisionnement en radioisotopes</div>
+            <div class="priority-desc">Statut "médicaments critiques" (Critical Medicines Act) · Soutien ERVI (European Radioisotopes Valley Initiative) · Capacité européenne résiliente</div>
+          </div>
+        </div>
+
+        <div class="priority-item">
+          <div class="priority-number">3</div>
+          <div class="priority-content">
+            <div class="priority-title">Adapter l'évaluation HTA</div>
+            <div class="priority-desc">Méthodologies spécifiques radioligand therapies · Expertise médecine nucléaire dans évaluations conjointes · Standards preuves flexibles mais robustes</div>
+          </div>
+        </div>
+
+        <div class="priority-item">
+          <div class="priority-number">4</div>
+          <div class="priority-content">
+            <div class="priority-title">Financer radiobiologie et dosimétrie</div>
+            <div class="priority-desc">Horizon Europe · Innovative Health Initiative · Recherche translationnelle · Études multicentriques · Fondations scientifiques thérapies ciblées</div>
+          </div>
+        </div>
+
+        <div class="priority-item">
+          <div class="priority-number">5</div>
+          <div class="priority-content">
+            <div class="priority-title">Renforcer la workforce</div>
+            <div class="priority-desc">Harmonisation formation (Professional Qualification Directive) · Mobilité transfrontalière · Planification long terme capacités · Collaboration interdisciplinaire</div>
+          </div>
+        </div>
+
+        <div class="priority-item">
+          <div class="priority-number">6</div>
+          <div class="priority-content">
+            <div class="priority-title">Harmoniser l'accès patients</div>
+            <div class="priority-desc">Coordination interface UE-national (évaluation ↔ remboursement) · Réduction disparités territoriales · Compétitivité innovateurs · Équité inter-États</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="vision-phase" style="display: none;">
+    <div class="vision-card">
+      <div class="vision-title">Le message politique de l'EANM</div>
+      <div class="vision-text">
+        "La médecine nucléaire est un pilier de la médecine personnalisée et de précision. Son évolution rapide exige que les cadres réglementaires, les chaînes d'approvisionnement et les systèmes de santé évoluent en parallèle. Sans action coordonnée au niveau européen sur ces priorités, l'innovation sera ralentie, les inégalités accrues, et l'Europe perdra son avantage compétitif dans ce domaine stratégique."
+      </div>
+    </div>
+
+    <div class="section" style="margin-top: 24px;">
+      <div class="section-title">Conditions de réussite (EANM)</div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+        <div style="background: #F5F0E6; padding: 16px; border-radius: 10px;">
+          <div style="font-size: 14px; font-weight: 600; color: #2A2A2A; margin-bottom: 6px; font-family: 'Source Sans 3', sans-serif;">Régulation cohérente</div>
+          <div style="font-size: 13px; color: #4A4A4A;">Cadre unique conciliant exigences pharmaceutiques et radioprotection</div>
+        </div>
+        <div style="background: #F5F0E6; padding: 16px; border-radius: 10px;">
+          <div style="font-size: 14px; font-weight: 600; color: #2A2A2A; margin-bottom: 6px; font-family: 'Source Sans 3', sans-serif;">Chaînes résilientes</div>
+          <div style="font-size: 13px; color: #4A4A4A;">Production européenne renforcée · Statut critique pour radioisotopes clés</div>
+        </div>
+        <div style="background: #F5F0E6; padding: 16px; border-radius: 10px;">
+          <div style="font-size: 14px; font-weight: 600; color: #2A2A2A; margin-bottom: 6px; font-family: 'Source Sans 3', sans-serif;">Financement structurel</div>
+          <div style="font-size: 13px; color: #4A4A4A;">Recherche fondamentale radiobiologie · Dosimétrie personnalisée · Essais cliniques</div>
+        </div>
+        <div style="background: #F5F0E6; padding: 16px; border-radius: 10px;">
+          <div style="font-size: 14px; font-weight: 600; color: #2A2A2A; margin-bottom: 6px; font-family: 'Source Sans 3', sans-serif;">Workforce qualifiée</div>
+          <div style="font-size: 13px; color: #4A4A4A;">Formation harmonisée · Mobilité professionnelle · Planification capacités</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-quote">
+      <div class="key-quote-text">
+        "Les prochaines années verront une expansion significative des applications thérapeutiques, en particulier avec l'essor du théranostic et des thérapies radioligand ciblées. Cette évolution transformera la médecine nucléaire en une discipline médicale encore plus large, intégrant diagnostic et traitement ciblé pour améliorer les résultats patients."
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showPhase(phase, button) {
+  document.getElementById('present-phase').style.display = 'none';
+  document.getElementById('challenges-phase').style.display = 'none';
+  document.getElementById('priorities-phase').style.display = 'none';
+  document.getElementById('vision-phase').style.display = 'none';
+  
+  document.querySelectorAll('.phase-btn').forEach(btn => btn.classList.remove('active'));
+  
+  document.getElementById(phase + '-phase').style.display = 'block';
+  button.classList.add('active');
+}
+</script>
+
+</body>
+</html>
