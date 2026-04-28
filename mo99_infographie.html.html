@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qui produit le 99Mo dans le monde ? — Gamma Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: #B5C4B5;
+    font-family: 'Crimson Pro', Georgia, serif;
+    padding: 26px 18px;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+
+  /* HEADER */
+  .header { text-align: center; }
+  .pill-label {
+    display: inline-block; background: #2A2A2A; color: #F5F0E6;
+    padding: 4px 16px; border-radius: 20px; font-size: 10px;
+    font-family: 'Source Sans 3', sans-serif; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 9px;
+  }
+  h1 { color: #2A2A2A; font-size: 25px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: #4A4A4A; font-size: 13px; font-style: italic; }
+  .subtitle strong { color: #5A4A6A; font-style: normal; font-weight: 600; }
+
+  /* CARDS */
+  .card { background: #F5F0E6; border-radius: 12px; padding: 15px 18px; box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+  .section-label {
+    font-size: 10px; font-family: 'Source Sans 3', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+    color: #4A4A4A; margin-bottom: 9px;
+  }
+
+  /* BAR */
+  .bar { display: flex; height: 28px; border-radius: 8px; overflow: hidden; margin-bottom: 10px; gap: 2px; }
+  .bar-seg {
+    flex-shrink: 0; border-radius: 4px; cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .bar-seg.dimmed { opacity: 0.25; }
+  .bar-seg.active { outline: 3px solid #2A2A2A; outline-offset: 1px; }
+  .bar-other {
+    flex: 1; background: #C0B8B0; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .bar-other span { color: #F5F0E6; font-size: 9px; font-family: 'Source Sans 3', sans-serif; }
+
+  /* LEGEND */
+  .legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 16px; }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer; padding: 3px 6px; border-radius: 5px;
+    transition: opacity 0.2s, background 0.2s;
+  }
+  .legend-item.dimmed { opacity: 0.35; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .legend-name { font-size: 12px; color: #2A2A2A; font-family: 'Source Sans 3', sans-serif; }
+  .legend-name.bold { font-weight: 700; }
+  .legend-pct { font-size: 12px; font-family: 'Source Sans 3', sans-serif; font-weight: 700; margin-left: auto; }
+
+  /* REGION PILLS */
+  .region-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .region-pill {
+    border-radius: 10px; padding: 13px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 8px; min-width: 0;
+  }
+  .region-pill-left { min-width: 0; }
+  .region-pill-name {
+    color: #fff; font-size: 12px; font-family: 'Source Sans 3', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+  }
+  .region-pill-rx { color: rgba(255,255,255,0.75); font-size: 11px; font-family: 'Source Sans 3', sans-serif; margin-top: 2px; }
+  .region-pill-share { color: #fff; font-size: 22px; font-weight: 700; line-height: 1; flex-shrink: 0; }
+
+  /* REACTOR CARDS */
+  .rx-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .rx-card {
+    border-radius: 10px; padding: 13px 14px; cursor: pointer;
+    display: flex; flex-direction: column; gap: 6px;
+    transition: all 0.2s ease; box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    background: #F5F0E6; border: 2px solid #E2DCD0;
+  }
+  .rx-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+  .rx-card.active { }
+  .rx-head { display: flex; justify-content: space-between; align-items: flex-start; }
+  .rx-name { font-size: 16px; font-weight: 700; }
+  .rx-loc { font-size: 11px; color: #6A6A6A; font-family: 'Source Sans 3', sans-serif; margin-top: 2px; }
+  .rx-share { font-size: 22px; font-weight: 700; line-height: 1; flex-shrink: 0; margin-left: 8px; }
+  .divider { height: 1px; background: #E2DCD0; }
+  .rx-meta { display: flex; flex-direction: column; gap: 4px; }
+  .rx-meta-row { display: flex; align-items: center; gap: 6px; }
+  .rx-meta-label {
+    font-size: 10px; font-family: 'Source Sans 3', sans-serif;
+    text-transform: uppercase; letter-spacing: 0.5px; color: #8A8A8A; flex-shrink: 0;
+  }
+  .rx-meta-val { font-size: 12px; font-family: 'Source Sans 3', sans-serif; color: #2A2A2A; }
+  .rx-meta-distrib { font-size: 12px; font-family: 'Source Sans 3', sans-serif; font-weight: 600; }
+  .rx-warning {
+    background: #FFF8E1; border: 1px solid #FFE082; border-radius: 5px;
+    padding: 4px 8px; font-size: 11px; color: #B06000;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .rx-note { font-size: 11px; color: #6A6A6A; font-family: 'Source Sans 3', sans-serif; font-style: italic; }
+
+  /* PROCESSORS */
+  .proc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .proc-card {
+    background: #fff; border-radius: 8px; padding: 14px 16px;
+    border: 1px solid #E2DCD0;
+  }
+  .proc-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .proc-name { font-size: 15px; font-weight: 700; }
+  .proc-origin { font-size: 11px; color: #6A6A6A; font-family: 'Source Sans 3', sans-serif; }
+  .proc-share { font-size: 26px; font-weight: 700; line-height: 1; flex-shrink: 0; margin-left: 8px; }
+  .proc-sources {
+    font-size: 11px; font-family: 'Source Sans 3', sans-serif; color: #4A4A4A;
+    background: #F5F0E6; border-radius: 4px; padding: 3px 8px;
+    margin-bottom: 9px; display: inline-block;
+  }
+  .proc-bar-bg { height: 5px; background: #E2DCD0; border-radius: 3px; margin-bottom: 4px; }
+  .proc-bar-fill { height: 100%; border-radius: 3px; }
+  .proc-label { font-size: 11px; color: #6A6A6A; font-family: 'Source Sans 3', sans-serif; }
+
+  /* RISK */
+  .risk {
+    background: #2A2A2A; border-radius: 12px; padding: 15px 20px;
+    display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center;
+  }
+  .risk-icon { color: #C9A84C; font-size: 28px; line-height: 1; }
+  .risk-title {
+    color: #F5F0E6; font-size: 11px; font-family: 'Source Sans 3', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;
+  }
+  .risk-body { color: #B0B0B0; font-size: 13px; line-height: 1.6; font-family: 'Source Sans 3', sans-serif; }
+  .risk-body .hi { color: #F5F0E6; font-weight: 600; }
+  .risk-body .gold { color: #C9A84C; font-weight: 600; }
+
+  /* FOOTER */
+  .footer { text-align: center; color: #4A4A4A; font-size: 10px; font-family: 'Source Sans 3', sans-serif; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="pill-label">Gamma Brief · Préambule</div>
+    <h1>Qui produit le <sup>99</sup>Mo dans le monde ?</h1>
+    <p class="subtitle">6 réacteurs · 4 distributeurs · 30 millions d'examens <sup>99m</sup>Tc par an · <strong>Cliquez sur un réacteur</strong></p>
+  </div>
+
+  <!-- SHARE BAR -->
+  <div class="card">
+    <div class="section-label">Répartition mondiale de la capacité de production</div>
+    <div class="bar" id="bar"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <!-- REGION PILLS -->
+  <div class="region-grid" id="regions"></div>
+
+  <!-- REACTOR CARDS -->
+  <div class="rx-grid" id="rx-grid"></div>
+
+  <!-- PROCESSORS -->
+  <div class="card">
+    <div class="section-label">Distributeurs mondiaux (processeurs Mo-99)</div>
+    <div class="proc-grid" id="proc-grid"></div>
+  </div>
+
+  <!-- RISK -->
+  <div class="risk">
+    <div class="risk-icon">⚠</div>
+    <div>
+      <div class="risk-title">Vulnérabilité systémique — critère n−1 OCDE/NEA</div>
+      <div class="risk-body">
+        L'arrêt simultané de <span class="hi">HFR + BR-2</span> supprime ~50% de l'offre mondiale.
+        Le critère n−1 exige une réserve de 35% pour couvrir la perte du plus grand producteur.
+        Fenêtre de risque ouverte jusqu'à <span class="gold">PALLAS (~2032)</span>.
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Sources : OECD/NEA HLG-MR · EMA/MSSG EMA/95894/2025 · NRG PALLAS (sept. 2025) · Parts approximatives — variables selon cycles de maintenance.
+  </div>
+
+</div>
+
+<script>
+const reactors = [
+  { id:'HFR',      flag:'🇳🇱', location:'Petten · Pays-Bas',          operator:'NRG / JRC-UE', distributor:'Curium + IRE',      share:30, note:'Remplacé par PALLAS ~2032',  warning:true,  color:'#4A3A5E', bg:'#EAE0F5' },
+  { id:'BR-2',     flag:'🇧🇪', location:'Mol · Belgique',              operator:'SCK·CEN',      distributor:'Curium + IRE',      share:20, note:'Réacteur vieux de 60+ ans', warning:true,  color:'#7060A0', bg:'#EDE8F8' },
+  { id:'SAFARI-1', flag:'🇿🇦', location:'Pelindaba · Afrique du Sud',  operator:'NECSA',        distributor:'NTP Radioisotopes', share:22, note:'100% LEU depuis 2017',      warning:false, color:'#C9A84C', bg:'#FBF5E6' },
+  { id:'MARIA',    flag:'🇵🇱', location:'Otwock-Świerk · Pologne',     operator:'NCBJ',         distributor:'Curium',            share:8,  note:'Backup critique',            warning:false, color:'#9880C0', bg:'#F2EEF9' },
+  { id:'LVR-15',   flag:'🇨🇿', location:'Řež · Rép. tchèque',          operator:'ÚJV Řež',      distributor:'IRE',               share:5,  note:'Capacité limitée',           warning:false, color:'#BBA8D8', bg:'#F6F2FC' },
+  { id:'OPAL',     flag:'🇦🇺', location:'Lucas Heights · Australie',   operator:'ANSTO',        distributor:'ANSTO Health',      share:15, note:'Potentiel ~25% mondial',     warning:false, color:'#4A7C6F', bg:'#EAF3F0' },
+];
+
+const regions = [
+  { label:'Europe',         share:63, color:'#5A4A6A', reactors:'HFR · BR-2 · MARIA · LVR-15' },
+  { label:'Afrique du Sud', share:22, color:'#C9A84C', reactors:'SAFARI-1' },
+  { label:'Australie',      share:15, color:'#4A7C6F', reactors:'OPAL' },
+];
+
+const processors = [
+  { name:'Curium',            origin:'Pays-Bas',      sources:'HFR · BR-2 · MARIA', share:45, color:'#4A3A5E' },
+  { name:'IRE',               origin:'Belgique',       sources:'HFR · BR-2 · LVR-15', share:25, color:'#7060A0' },
+  { name:'NTP Radioisotopes', origin:'Afrique du Sud', sources:'SAFARI-1',            share:22, color:'#C9A84C' },
+  { name:'ANSTO Health',      origin:'Australie',      sources:'OPAL',                share:15, color:'#4A7C6F' },
+];
+
+const totalShown = reactors.reduce((s,r) => s+r.share, 0);
+let selected = null;
+
+function toggle(id) {
+  selected = (selected === id) ? null : id;
+  render();
+}
+
+function render() {
+  // BAR
+  const bar = document.getElementById('bar');
+  bar.innerHTML = reactors.map(rx => `
+    <div class="bar-seg ${selected && selected!==rx.id?'dimmed':''} ${selected===rx.id?'active':''}"
+      style="width:${rx.share}%;background:${rx.color}"
+      title="${rx.id} — ${rx.share}%"
+      onclick="toggle('${rx.id}')"></div>
+  `).join('') + `<div class="bar-other"><span>~${100-totalShown}%</span></div>`;
+
+  // LEGEND
+  const legend = document.getElementById('legend');
+  legend.innerHTML = reactors.map(rx => `
+    <div class="legend-item ${selected && selected!==rx.id?'dimmed':''}"
+      style="background:${selected===rx.id?rx.bg:'transparent'}"
+      onclick="toggle('${rx.id}')">
+      <div class="legend-swatch" style="background:${rx.color}"></div>
+      <span class="legend-name ${selected===rx.id?'bold':''}">${rx.flag} ${rx.id}</span>
+      <span class="legend-pct" style="color:${rx.color}">${rx.share}%</span>
+    </div>
+  `).join('');
+
+  // REACTOR CARDS
+  const grid = document.getElementById('rx-grid');
+  grid.innerHTML = reactors.map(rx => {
+    const active = selected === rx.id;
+    return `
+    <div class="rx-card ${active?'active':''}"
+      style="background:${active?rx.bg:'#F5F0E6'};border-color:${active?rx.color:'#E2DCD0'};border-top:4px solid ${rx.color};box-shadow:${active?`0 4px 16px ${rx.color}40`:'0 3px 10px rgba(0,0,0,0.06)'}"
+      onclick="toggle('${rx.id}')">
+      <div class="rx-head">
+        <div>
+          <span class="rx-name" style="color:${rx.color}">${rx.flag} ${rx.id}</span>
+          <div class="rx-loc">${rx.location}</div>
+        </div>
+        <span class="rx-share" style="color:${rx.color}">${rx.share}%</span>
+      </div>
+      <div class="divider"></div>
+      <div class="rx-meta">
+        <div class="rx-meta-row">
+          <span class="rx-meta-label">Op.</span>
+          <span class="rx-meta-val">${rx.operator}</span>
+        </div>
+        <div class="rx-meta-row">
+          <span class="rx-meta-label">Distrib.</span>
+          <span class="rx-meta-distrib" style="color:${rx.color}">→ ${rx.distributor}</span>
+        </div>
+      </div>
+      ${rx.warning
+        ? `<div class="rx-warning">⚠ ${rx.note}</div>`
+        : `<div class="rx-note">${rx.note}</div>`}
+    </div>`;
+  }).join('');
+}
+
+// REGION PILLS (static)
+document.getElementById('regions').innerHTML = regions.map(r => `
+  <div class="region-pill" style="background:${r.color}">
+    <div class="region-pill-left">
+      <div class="region-pill-name">${r.label}</div>
+      <div class="region-pill-rx">${r.reactors}</div>
+    </div>
+    <div class="region-pill-share">~${r.share}%</div>
+  </div>
+`).join('');
+
+// PROCESSORS (static)
+document.getElementById('proc-grid').innerHTML = processors.map(p => `
+  <div class="proc-card" style="border-top:3px solid ${p.color}">
+    <div class="proc-head">
+      <div>
+        <div class="proc-name" style="color:${p.color}">${p.name}</div>
+        <div class="proc-origin">${p.origin}</div>
+      </div>
+      <div class="proc-share" style="color:${p.color}">~${p.share}%</div>
+    </div>
+    <div class="proc-sources">Sources : ${p.sources}</div>
+    <div class="proc-bar-bg">
+      <div class="proc-bar-fill" style="width:${p.share}%;background:${p.color}"></div>
+    </div>
+    <div class="proc-label">de la demande mondiale</div>
+  </div>
+`).join('');
+
+render();
+</script>
+</body>
+</html>
