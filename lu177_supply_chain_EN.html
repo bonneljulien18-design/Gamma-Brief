@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¹⁷⁷Lu n.c.a. — from raw material to patient · Gamma Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background-color:#B5C4B5;padding:26px 18px;font-family:'Crimson Pro',Georgia,serif}
+.wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.header{text-align:center}
+.header img{height:52px;margin-bottom:10px;filter:drop-shadow(0 0 6px rgba(201,168,76,0.3))}
+.header h1{color:#2A2A2A;font-size:25px;font-weight:700;margin-bottom:4px}
+.header p{color:#4A4A4A;font-size:13px;font-style:italic}
+.header p span{color:#5A4A6A;font-style:normal;font-weight:600}
+.card{background-color:#F5F0E6;border-radius:12px;padding:20px 18px;box-shadow:0 4px 16px rgba(0,0,0,0.07)}
+.section-label{font-size:10px;font-family:'Source Sans 3',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#4A4A4A;margin-bottom:14px}
+.steps-row{display:flex;align-items:stretch;gap:6px;margin-bottom:12px}
+.step-btn{flex:1;min-width:0;background-color:#fff;border:2px solid #E2DCD0;border-radius:10px;padding:12px 10px;text-align:center;cursor:pointer;transition:all 0.2s ease;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+.step-btn:hover{transform:translateY(-2px)}
+.step-icon{font-size:20px;margin-bottom:6px}
+.step-label{font-size:13px;font-weight:700;margin-bottom:3px}
+.step-sub{color:#6A6A6A;font-size:10px;font-family:'Source Sans 3',sans-serif}
+.detail-panel{border-radius:8px;padding:12px 16px;display:none;gap:12px;align-items:flex-start}
+.detail-panel.open{display:flex}
+.detail-icon{font-size:24px;flex-shrink:0}
+.detail-title{color:#fff;font-size:13px;font-family:'Source Sans 3',sans-serif;font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.detail-desc{color:rgba(255,255,255,0.9);font-size:13px;line-height:1.6;font-family:'Source Sans 3',sans-serif}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.two-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.three-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.rx-card{background-color:#fff;border-radius:8px;padding:10px 12px;border:1px solid #E2DCD0;border-top-width:3px;box-shadow:0 2px 6px rgba(0,0,0,0.04);transition:all 0.15s ease}
+.rx-card:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.rx-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.rx-note{color:#6A6A6A;font-size:11px;font-family:'Source Sans 3',sans-serif}
+.rx-card.highlighted .rx-name{color:#fff}
+.rx-card.highlighted .rx-note{color:rgba(255,255,255,0.8)}
+.site-card{background-color:#fff;border-radius:8px;padding:12px 14px;border:1px solid #E2DCD0;border-top-width:3px;box-shadow:0 2px 6px rgba(0,0,0,0.04);transition:all 0.15s ease}
+.site-card:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.site-name{font-size:14px;font-weight:700;margin-bottom:3px}
+.site-note{color:#6A6A6A;font-size:11px;font-family:'Source Sans 3',sans-serif}
+.warning{background-color:#2A2A2A;border-radius:12px;padding:15px 20px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.warning-icon{color:#C9A84C;font-size:28px;line-height:1}
+.warning-title{color:#F5F0E6;font-size:11px;font-family:'Source Sans 3',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.warning-text{color:#B0B0B0;font-size:13px;line-height:1.6;font-family:'Source Sans 3',sans-serif}
+.warning-text strong{color:#F5F0E6;font-weight:600}
+.arrow{display:flex;align-items:center;color:#C0B8B0;font-size:18px;font-weight:700;flex-shrink:0}
+.footer{text-align:center;color:#4A4A4A;font-size:10px;font-family:'Source Sans 3',sans-serif;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="data:image/png;base64,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" alt="Gamma Brief">
+    <h1>¹⁷⁷Lu n.c.a. — from raw material to patient</h1>
+    <p>6 reactors · 6 producers · 3 radiolabeling sites · <span>Click a step to expand</span></p>
+  </div>
+
+  <!-- FLOW CHAIN -->
+  <div class="card">
+    <div class="section-label">Production chain — 5 critical steps</div>
+    <div class="steps-row" id="steps-row"></div>
+    <div class="detail-panel" id="detail-panel"></div>
+  </div>
+
+  <!-- REACTORS + PRODUCERS -->
+  <div class="two-col">
+    <div class="card" style="padding:16px 18px">
+      <div class="section-label">Irradiation reactors</div>
+      <div class="two-grid" id="reactors-grid"></div>
+    </div>
+    <div class="card" style="padding:16px 18px">
+      <div class="section-label">¹⁷⁷Lu isotope producers</div>
+      <div class="two-grid" id="producers-grid"></div>
+    </div>
+  </div>
+
+  <!-- RADIOLABELING SITES -->
+  <div class="card" style="padding:16px 18px">
+    <div class="section-label">Radiolabeling sites — the last mile</div>
+    <div class="three-grid" id="sites-grid"></div>
+  </div>
+
+  <!-- WARNING -->
+  <div class="warning">
+    <div class="warning-icon">⚠</div>
+    <div>
+      <div class="warning-title">2023 shortage — the bottleneck was not the isotope</div>
+      <div class="warning-text">The 2023 ¹⁷⁷Lu-PSMA shortage was not caused by a lack of bulk isotope, but by a <strong>saturation of radiolabeling capacity</strong>. Since marketing authorizations are site-specific, no automatic transfer between sites is possible. The weak link is regulatory, not reactor-based.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Sources: EMA · Novartis · ITM Isotope Technologies Munich · IAEA · public data 2024–2025. <em>Gamma Brief</em>
+  </div>
+
+</div>
+
+<script>
+const steps = [
+  {id:'precursor',label:'Precursor',sub:'Enriched ¹⁷⁶Yb',icon:'⚛',color:'#4A3A5E',desc:"Enriched ytterbium-176 is the raw material. Until 2024, most commercially available ¹⁷⁶Yb came from Russia — a structural geopolitical dependency now being addressed by Kinectrics (Canada) and SHINE Technologies (US)."},
+  {id:'reactor',label:'Reactor',sub:'Yb→Lu irradiation',icon:'🔬',color:'#7060A0',desc:"¹⁷⁶Yb is irradiated in a high-flux neutron reactor. Transmutation yields no-carrier-added (n.c.a.) ¹⁷⁷Lu — the high specific activity form required for therapeutic use. Only a handful of reactors worldwide provide sufficient neutron flux."},
+  {id:'sep',label:'Separation',sub:'Yb/Lu GMP',icon:'🧪',color:'#9880C0',desc:"GMP-grade Yb/Lu radiochemical separation. This is a critical step: radionuclidic purity determines the quality of the final product. The process is proprietary and varies between producers."},
+  {id:'marking',label:'Radiolabeling',sub:'PSMA · DOTATATE',icon:'💊',color:'#C9A84C',desc:"Conjugation of ¹⁷⁷Lu with the targeting vector (PSMA-617, DOTATATE…). Each radiolabeling site holds a site-specific marketing authorization — no automatic transfer between sites is possible. This is the main bottleneck of the chain, as demonstrated by the 2023 Pluvicto shortage."},
+  {id:'patient',label:'Patient',sub:'≤ 5 days · T½ 6.6 d',icon:'🏥',color:'#4A7C6F',desc:"Administration to the patient within 5 days of production. The 6.6-day half-life imposes tight logistics and close coordination between production scheduling and clinical planning."},
+];
+
+const reactors = [
+  {name:'ILL Grenoble',flag:'🇫🇷',partner:'ITM partner since 2009',color:'#4A3A5E'},
+  {name:'HFR Petten',flag:'🇳🇱',partner:'Future: PALLAS ~2031',color:'#7060A0'},
+  {name:'BR-2 Mol',flag:'🇧🇪',partner:'SCK·CEN',color:'#9880C0'},
+  {name:'Bruce Power',flag:'🇨🇦',partner:'Isogen · ITM (1st civil)',color:'#BBA8D8'},
+  {name:'SAFARI-1',flag:'🇿🇦',partner:'NTP · ITM',color:'#C9A84C'},
+  {name:'OPAL',flag:'🇦🇺',partner:'ANSTO',color:'#4A7C6F'},
+];
+
+const producers = [
+  {name:'ITM Munich',flag:'🇩🇪',note:"World's largest n.c.a. producer",color:'#4A3A5E',h:true},
+  {name:'E&Ziegler',flag:'🇩🇪',note:'Theralugand® GMP',color:'#7060A0',h:false},
+  {name:'NTP',flag:'🇿🇦',note:'ITM licence',color:'#C9A84C',h:false},
+  {name:'SHINE',flag:'🇺🇸',note:'100,000 doses/yr · fusion',color:'#5B8DB8',h:false},
+  {name:'NRG PALLAS',flag:'🇳🇱',note:'× Curium + Morpho',color:'#9880C0',h:false},
+  {name:'ANSTO',flag:'🇦🇺',note:'OPAL reactor',color:'#4A7C6F',h:false},
+];
+
+const sites = [
+  {name:'Novartis Ivrea',flag:'🇮🇹',note:'Main EU site',color:'#C9A84C'},
+  {name:'Novartis US',flag:'🇺🇸',note:'NJ + Indiana · post-2023',color:'#C9A84C'},
+  {name:'AAA · CDMOs',flag:'🌐',note:'DOTATATE · clinical trials',color:'#4A7C6F'},
+];
+
+let active = null;
+const sr = document.getElementById('steps-row');
+const dp = document.getElementById('detail-panel');
+
+steps.forEach((s, i) => {
+  const btn = document.createElement('div');
+  btn.className = 'step-btn';
+  btn.dataset.id = s.id;
+  btn.innerHTML = `<div class="step-icon">${s.icon}</div><div class="step-label" style="color:${s.color}">${s.label}</div><div class="step-sub">${s.sub}</div>`;
+  btn.onclick = () => {
+    if (active === s.id) {
+      active = null;
+      dp.className = 'detail-panel';
+      dp.innerHTML = '';
+      document.querySelectorAll('.step-btn').forEach((b, j) => {
+        b.style.backgroundColor = '#fff';
+        b.style.borderColor = '#E2DCD0';
+        b.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+        b.querySelector('.step-label').style.color = steps[j].color;
+        b.querySelector('.step-sub').style.color = '#6A6A6A';
+      });
+    } else {
+      document.querySelectorAll('.step-btn').forEach((b, j) => {
+        b.style.backgroundColor = '#fff';
+        b.style.borderColor = '#E2DCD0';
+        b.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+        b.querySelector('.step-label').style.color = steps[j].color;
+        b.querySelector('.step-sub').style.color = '#6A6A6A';
+      });
+      active = s.id;
+      btn.style.backgroundColor = s.color;
+      btn.style.borderColor = s.color;
+      btn.style.boxShadow = `0 4px 16px ${s.color}40`;
+      btn.querySelector('.step-label').style.color = '#fff';
+      btn.querySelector('.step-sub').style.color = 'rgba(255,255,255,0.8)';
+      dp.className = 'detail-panel open';
+      dp.style.backgroundColor = s.color;
+      dp.innerHTML = `<div class="detail-icon">${s.icon}</div><div><div class="detail-title">${s.label}</div><div class="detail-desc">${s.desc}</div></div>`;
+    }
+  };
+  sr.appendChild(btn);
+  if (i < steps.length - 1) {
+    const arr = document.createElement('div');
+    arr.className = 'arrow';
+    arr.textContent = '→';
+    sr.appendChild(arr);
+  }
+});
+
+const rg = document.getElementById('reactors-grid');
+reactors.forEach(r => {
+  const c = document.createElement('div');
+  c.className = 'rx-card';
+  c.style.borderTopColor = r.color;
+  c.innerHTML = `<div class="rx-name" style="color:${r.color}">${r.flag} ${r.name}</div><div class="rx-note">${r.partner}</div>`;
+  rg.appendChild(c);
+});
+
+const pg = document.getElementById('producers-grid');
+producers.forEach(p => {
+  const c = document.createElement('div');
+  c.className = p.h ? 'rx-card highlighted' : 'rx-card';
+  c.style.borderTopColor = p.color;
+  c.style.borderColor = p.h ? p.color : '#E2DCD0';
+  c.style.backgroundColor = p.h ? p.color : '#fff';
+  c.innerHTML = `<div class="rx-name" style="color:${p.h ? '#fff' : p.color}">${p.flag} ${p.name}</div><div class="rx-note">${p.note}</div>`;
+  if (p.h) c.querySelector('.rx-note').style.color = 'rgba(255,255,255,0.8)';
+  pg.appendChild(c);
+});
+
+const sg = document.getElementById('sites-grid');
+sites.forEach(m => {
+  const c = document.createElement('div');
+  c.className = 'site-card';
+  c.style.borderTopColor = m.color;
+  c.innerHTML = `<div class="site-name" style="color:${m.color}">${m.flag} ${m.name}</div><div class="site-note">${m.note}</div>`;
+  sg.appendChild(c);
+});
+</script>
+</body>
+</html>
