@@ -1,0 +1,210 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold2:#E8C87A;--dark:#0f0f0f;--card:#1a1a1a;
+  --muted:#888;--border:#2a2a2a;--white:#f0e8d8;
+  --green:#4caf7d;--yellow:#e8b84c;--orange:#e87c4c;--red:#e84c4c;
+}
+.wrap{background:var(--dark);padding:24px;border-radius:12px;font-family:'Syne',sans-serif;color:var(--white)}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-family:'DM Mono',monospace}
+.sub{font-size:18px;font-weight:700;margin-bottom:20px;color:var(--white)}
+
+.isotope-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+.iso-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 10px;cursor:pointer;transition:all .2s;text-align:center;position:relative;overflow:hidden}
+.iso-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,var(--gold))}
+.iso-card:hover{border-color:var(--accent,var(--gold));transform:translateY(-2px)}
+.iso-card.active{border-color:var(--accent,var(--gold));background:#222}
+.iso-symbol{font-size:22px;font-weight:700;color:var(--white);line-height:1.1}
+.iso-symbol sup{font-size:13px;color:var(--gold)}
+.iso-name{font-size:10px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace;letter-spacing:.5px}
+.iso-t{font-size:11px;color:var(--gold2);margin-top:4px;font-family:'DM Mono',monospace}
+.maturity-dot{width:7px;height:7px;border-radius:50%;margin:6px auto 0;background:var(--accent)}
+.maturity-label{font-size:9px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace}
+
+.detail-panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;min-height:220px;transition:all .3s}
+.detail-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.detail-symbol{font-size:44px;font-weight:700;line-height:1;color:var(--white)}
+.detail-symbol sup{font-size:22px;color:var(--gold)}
+.detail-name{font-size:20px;font-weight:700;color:var(--white)}
+.detail-element{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.5px;margin-top:6px}
+
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.detail-col{}
+.field-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.field-val{font-size:13px;color:var(--white);line-height:1.5}
+
+.decay-chain{margin-top:12px}
+.dc-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.dc-nodes{display:flex;align-items:center;gap:0;flex-wrap:wrap}
+.dc-node{background:#222;border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:11px;font-family:'DM Mono',monospace;color:var(--white);white-space:nowrap}
+.dc-arrow{color:var(--gold);font-size:12px;padding:0 4px;font-family:'DM Mono',monospace}
+.dc-alpha{color:var(--gold);font-size:9px;display:block;text-align:center;margin-top:1px}
+
+.legend{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--muted);font-family:'DM Mono',monospace}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+</style>
+
+<div class="wrap">
+<h2 class="sr-only">Cartographie interactive des 7 émetteurs alpha en médecine nucléaire thérapeutique — propriétés physiques, chaînes de désintégration, vecteurs et maturité clinique</h2>
+<div class="title">Gamma Focus — Alpha thérapie</div>
+<div class="sub">Cartographie des émetteurs alpha cliniques</div>
+
+<div class="isotope-grid" id="grid"></div>
+<div class="detail-panel" id="detail">
+  <div style="display:flex;align-items:center;justify-content:center;height:160px;color:var(--muted);font-size:13px;font-family:'DM Mono',monospace">← Sélectionnez un isotope</div>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Approuvé</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--yellow)"></div>Phase II</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--orange)"></div>Phase I</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Préclinique</div>
+</div>
+</div>
+
+<script>
+const data = [
+  {
+    sym:'Ra',mass:'223',name:'Radium-223',element:'Radium',t:'11,4 j',
+    accent:'#4caf7d',mat:'Approuvé',matColor:'#4caf7d',
+    vecteur:'Calcium mimétique',indication:'mCRPC — os',
+    mecanism:'Analogue calcique osseux naturel. Se fixe préférentiellement dans les zones de remodelage osseux (métastases ostéoblastiques). Émet 4 α en cascade et des β/γ résiduels exploitables en SPECT.',
+    dose:'55 kBq/kg · 6 cycles/4 sem',
+    essai:'ALSYMPCA (n=921) — OS +3,6 mois vs placebo (p<0,001). PEACE-3 : Ra-223 + enzalutamide 1ère ligne mCRPC.',
+    chain:[{sym:'²²³Ra',alpha:true},{sym:'²¹⁹Rn',alpha:true},{sym:'²¹⁵Po',alpha:true},{sym:'²¹¹Bi',alpha:true},{sym:'²⁰⁷Pb',alpha:false}],
+    alphaCount:'4α',tox:'Thrombopénie G3-4 : 3% — Diarrhée G3 : 2%. Profil favorable.'
+  },
+  {
+    sym:'Ac',mass:'225',name:'Actinium-225',element:'Actinium',t:'9,9 j',
+    accent:'#e8b84c',mat:'Phase I/II',matColor:'#e8b84c',
+    vecteur:'PSMA-617 / PSMA I&T',indication:'mCRPC',
+    mecanism:'Chef de chaîne à 4 particules alpha. Conjugué au ligand PSMA. Puissance cytotoxique ×5-10 vs ¹⁷⁷Lu par particule. Problème des filles radioactives mobiles (recul nucléaire → redistribution organiques).',
+    dose:'8 MBq recommandé phase 2 (Erasmus MC 2026)',
+    essai:'Séries compassionnelles (Kratochwil, Sathekge) : PSA50 ~70–90% en 3ème ligne. Phase 1 Erasmus MC 2026 : PSA50 44%, dose rénale 1,59 Gy/MBq, salivaires 1,43 Gy/MBq.',
+    chain:[{sym:'²²⁵Ac',alpha:true},{sym:'²²¹Fr',alpha:true},{sym:'²¹⁷At',alpha:true},{sym:'²¹³Bi',alpha:true},{sym:'²⁰⁹Bi',alpha:false}],
+    alphaCount:'4α',tox:'Xérostomie 89% (dominante). Néphrotoxicité cumulative. Filles radioactives non dosimétrisables en SPECT/CT.'
+  },
+  {
+    sym:'Pb',mass:'212',name:'Plomb-212',element:'Plomb',t:'10,6 h',
+    accent:'#e8b84c',mat:'Phase II',matColor:'#e8b84c',
+    vecteur:'DOTAMTATE (AlphaMedix™)',indication:'GEP-NET',
+    mecanism:'Générateur in vivo de ²¹²Bi (émetteur α réel, T½ 60,6 min). Le plomb se fixe sur le récepteur somatostatine, puis se désintègre sur place en bismuth-212 qui délivre l\'irradiation alpha localement. Demi-vie logistique favorable.',
+    dose:'67,6 µCi/kg · 4 cycles/8 sem',
+    essai:'ALPHAMEDIX-02 phase 2 (ESMO 2025) : PRRT-naïf ORR 54,3% · PFS 70-75% à 3 ans. PRRT-exposé (n=26) ORR 34,6% · DCR 96,2% · 0 progression chez répondeurs.',
+    chain:[{sym:'²¹²Pb',alpha:false},{sym:'²¹²Bi',alpha:true},{sym:'²⁰⁸Tl/²⁰⁸Pb',alpha:false}],
+    alphaCount:'1α in situ',tox:'Fatigue, nausées, alopécie. Dysphagie/achalasie signalée. Néphrotoxicité tardive à surveiller.'
+  },
+  {
+    sym:'At',mass:'211',name:'Astate-211',element:'Astate',t:'7,2 h',
+    accent:'#e87c4c',mat:'Phase I',matColor:'#e87c4c',
+    vecteur:'NaAt / anti-tenascine / anti-NaPi2b',indication:'Thyroïde réfract. / gliome / ovaire',
+    mecanism:'Halogène, analogue chimique de l\'iode. Émet 1α propre (pas de chaîne) — avantage dosimétrique majeur. Capté par le NIS (symporteur sodium/iodure) en thyroïde. Limite : production sur cyclotrone seulement, T½ courte = logistique contrainte.',
+    dose:'Variable selon indication (phase I)',
+    essai:'Alpha-T1 (Osaka) : thyroïde différenciée réfractaire à I-131, phase I complétée 2025. Sahlgrenska (MX35, ovaire intrapéritonéal n=12) : MTD non atteinte. Duke (glioblastome, anti-tenascine) : n=18, faisabilité démontrée.',
+    chain:[{sym:'²¹¹At',alpha:true},{sym:'²⁰⁷Bi',alpha:false}],
+    alphaCount:'1α',tox:'Profil favorable dans les essais. Xérostomie si fixation thyroïdienne non bloquée.'
+  },
+  {
+    sym:'Bi',mass:'213',name:'Bismuth-213',element:'Bismuth',t:'45,6 min',
+    accent:'#e87c4c',mat:'Essais cliniques',matColor:'#e87c4c',
+    vecteur:'DOTA-peptides / anticorps',indication:'Leucémie / NET',
+    mecanism:'Fils de ²²⁵Ac ou obtenu par générateur ²²⁵Ac/²¹³Bi. T½ très courte = action rapide et redistribution minimale des filles. Idéal pour ciblage intracavitaire ou circulant (leucémie). Contrainte : délai injection/administration minimal.',
+    dose:'Variable (protocoles investigateurs)',
+    essai:'Essais cliniques hémato-oncologie (leucémie myéloïde). Études NET en combinaison. Moins avancé que ²²⁵Ac-PSMA.',
+    chain:[{sym:'²¹³Bi',alpha:true},{sym:'²⁰⁹Tl→²⁰⁹Bi',alpha:false}],
+    alphaCount:'1α',tox:'Hématotoxicité (maladie hématologique). Redistribution rénale à surveiller.'
+  },
+  {
+    sym:'Th',mass:'227',name:'Thorium-227',element:'Thorium',t:'18,7 j',
+    accent:'#e87c4c',mat:'Phase I',matColor:'#e87c4c',
+    vecteur:'Anticorps monoclonaux (BAY2413555, PSMA-TTC)',indication:'Sein / prostate / LNH',
+    mecanism:'Demi-vie longue — compatible avec les cinétiques des anticorps monoclonaux (plusieurs jours). Conjugué à des AcM ciblant HER2, PSMA, CD22... Emet 1α + chaîne courte via Ra-223 fils.',
+    dose:'Variable phase I',
+    essai:'Essais Bayer phase I/II en cours. PSMA-TTC (prostate). BAY2413555 (LNH CD22+). Données préliminaires efficacité + tolérance encourageantes.',
+    chain:[{sym:'²²⁷Th',alpha:true},{sym:'²²³Ra',alpha:true},{sym:'→ chaîne Ra',alpha:false}],
+    alphaCount:'1α + chaîne Ra',tox:'En cours d\'évaluation. Hématotoxicité, tolérance à préciser.'
+  },
+  {
+    sym:'Tb',mass:'149',name:'Terbium-149',element:'Terbium',t:'4,1 h',
+    accent:'#e84c4c',mat:'Préclinique',matColor:'#e84c4c',
+    vecteur:'PSMA / DOTANOC (quadruplet Tb)',indication:'— (préclinique)',
+    mecanism:'Membre de la famille quadruplet terbium (¹⁴⁹Tb α · ¹⁵²Tb TEP · ¹⁵⁵Tb SPECT · ¹⁶¹Tb β/Auger). Même vecteur = imagerie TEP/SPECT et thérapie α/β/Auger avec le même ligand. Concept théranostique ultimate — mais production CERN (ISOLDE) seulement, disponibilité infime.',
+    dose:'Non définie',
+    essai:'Préclinique uniquement. Disponibilité dépendante d\'accélérateurs de particules (CERN-ISOLDE). Pas d\'essai clinique planifié à court terme.',
+    chain:[{sym:'¹⁴⁹Tb',alpha:true},{sym:'¹⁴⁵Eu',alpha:false}],
+    alphaCount:'1α',tox:'Non évaluée en clinique.'
+  }
+];
+
+const grid = document.getElementById('grid');
+const detail = document.getElementById('detail');
+let active = -1;
+
+data.forEach((d,i)=>{
+  const c = document.createElement('div');
+  c.className='iso-card';
+  c.style.setProperty('--accent',d.accent);
+  c.innerHTML=`<div class="iso-symbol"><sup>${d.mass}</sup>${d.sym}</div><div class="iso-name">${d.element}</div><div class="iso-t">${d.t}</div><div class="maturity-dot" style="background:${d.matColor}"></div><div class="maturity-label">${d.mat}</div>`;
+  c.onclick=()=>select(i);
+  grid.appendChild(c);
+});
+
+function select(i){
+  if(active===i){active=-1;grid.children[i].classList.remove('active');detail.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:160px;color:var(--muted);font-size:13px;font-family:\'DM Mono\',monospace">← Sélectionnez un isotope</div>';return;}
+  if(active>=0)grid.children[active].classList.remove('active');
+  active=i;
+  grid.children[i].classList.add('active');
+  const d=data[i];
+  const chain=d.chain.map((n,j)=>{
+    const arr = j<d.chain.length-1?`<span class="dc-arrow">→</span>`:'';
+    return `<div><div class="dc-node" style="border-color:${n.alpha?d.accent:'#2a2a2a'}">${n.sym}</div>${n.alpha?`<span class="dc-alpha" style="color:${d.accent}">α</span>`:`<span class="dc-alpha" style="color:#555">β/stable</span>`}</div>${arr}`;
+  }).join('');
+
+  detail.innerHTML=`
+  <div class="detail-header">
+    <div>
+      <div class="detail-symbol"><sup>${d.mass}</sup>${d.sym}</div>
+    </div>
+    <div>
+      <div class="detail-name">${d.name}</div>
+      <div class="detail-element" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">T½ ${d.t} &nbsp;·&nbsp; ${d.alphaCount}</div>
+      <span class="badge" style="background:${d.matColor}22;color:${d.matColor};border:1px solid ${d.matColor}44">${d.mat}</span>
+    </div>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-col">
+      <div class="field-label">Vecteur</div>
+      <div class="field-val">${d.vecteur}</div>
+      <div style="margin-top:12px">
+        <div class="field-label">Indication principale</div>
+        <div class="field-val">${d.indication}</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="field-label">Mécanisme</div>
+        <div class="field-val" style="font-size:12px;color:#bbb;line-height:1.6">${d.mecanism}</div>
+      </div>
+    </div>
+    <div class="detail-col">
+      <div class="field-label">Données cliniques</div>
+      <div class="field-val" style="font-size:12px;color:#bbb;line-height:1.6">${d.essai}</div>
+      <div style="margin-top:12px">
+        <div class="field-label">Tolérance</div>
+        <div class="field-val" style="font-size:12px;color:#bbb;line-height:1.6">${d.tox}</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="field-label">Dose / schéma</div>
+        <div class="field-val" style="font-size:12px;color:#bbb">${d.dose}</div>
+      </div>
+    </div>
+  </div>
+  <div class="decay-chain" style="margin-top:14px;border-top:1px solid #2a2a2a;padding-top:12px">
+    <div class="dc-label">Chaîne de désintégration</div>
+    <div class="dc-nodes">${chain}</div>
+  </div>`;
+}
+</script>
