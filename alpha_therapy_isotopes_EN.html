@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha Emitter Map · Gamma Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Crimson+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0D0D0D;
+  color: #F0E8D0;
+  font-family: 'Source Sans 3', sans-serif;
+  min-height: 100vh;
+  padding: 28px 24px 40px;
+}
+
+.page-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #C9A84C;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #F0E8D0;
+  margin-bottom: 24px;
+  letter-spacing: -0.3px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+  max-width: 960px;
+}
+
+.grid-row2 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+  max-width: 960px;
+}
+
+.grid-row2 .card:nth-child(1) { grid-column: 1; }
+.grid-row2 .card:nth-child(2) { grid-column: 2; }
+
+/* CARDS */
+.card {
+  background: #1A1A1A;
+  border-radius: 10px;
+  padding: 18px 16px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-top: 3px solid transparent;
+  position: relative;
+  user-select: none;
+}
+
+.card:hover { transform: translateY(-2px); background: #222; }
+.card.active { background: #242010; }
+
+.card.green  { border-top-color: #4CAF50; }
+.card.yellow { border-top-color: #E8C87A; }
+.card.orange { border-top-color: #E87A30; }
+.card.red    { border-top-color: #E84040; }
+
+.isotope-symbol {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #C9A84C;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.isotope-symbol sup {
+  font-size: 15px;
+  vertical-align: super;
+}
+
+.element-name {
+  font-size: 11px;
+  color: #9A8A6A;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.half-life {
+  font-size: 16px;
+  font-weight: 700;
+  color: #E8C87A;
+  margin-bottom: 8px;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.status-label {
+  font-size: 11px;
+  color: #B0A080;
+}
+
+.green  .status-dot { background: #4CAF50; }
+.yellow .status-dot { background: #E8C87A; }
+.orange .status-dot { background: #E87A30; }
+.red    .status-dot { background: #E84040; }
+
+/* DETAIL PANEL */
+.detail-panel {
+  background: #141414;
+  border-radius: 12px;
+  padding: 28px 32px;
+  max-width: 960px;
+  border: 1px solid #2A2A2A;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.detail-panel.empty {
+  color: #4A4A3A;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.detail-panel.empty::before {
+  content: "← Select an isotope";
+  font-family: 'Source Sans 3', monospace;
+}
+
+.detail-content { width: 100%; }
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #2A2A2A;
+}
+
+.detail-symbol {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 52px;
+  font-weight: 700;
+  color: #C9A84C;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.detail-symbol sup { font-size: 24px; }
+
+.detail-meta { flex: 1; }
+
+.detail-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #F0E8D0;
+  margin-bottom: 4px;
+}
+
+.detail-hl {
+  font-size: 14px;
+  color: #E8C87A;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.detail-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+.detail-status.green  { background: rgba(76,175,80,0.15); color: #6FCF74; }
+.detail-status.yellow { background: rgba(232,200,122,0.15); color: #E8C87A; }
+.detail-status.orange { background: rgba(232,122,48,0.15); color: #E89050; }
+.detail-status.red    { background: rgba(232,64,64,0.15); color: #E87070; }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.detail-block {
+  background: #1E1E1E;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.detail-block-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #7A6A4A;
+  margin-bottom: 6px;
+}
+
+.detail-block-text {
+  font-size: 13px;
+  color: #D0C8B0;
+  line-height: 1.55;
+}
+
+.detail-block-text strong {
+  color: #E8C87A;
+}
+
+.detail-block.wide {
+  grid-column: span 2;
+}
+
+.detail-block.full {
+  grid-column: span 3;
+}
+
+/* LEGEND */
+.legend {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 960px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #9A8A6A;
+}
+
+.legend-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+}
+</style>
+</head>
+<body>
+
+<div class="page-label">Gamma Focus — Alpha Therapy</div>
+<h1>Clinical alpha emitter map</h1>
+
+<!-- ROW 1 -->
+<div class="grid" id="row1"></div>
+<!-- ROW 2 -->
+<div class="grid-row2" id="row2"></div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel empty" id="detail"></div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#4CAF50"></div>Approved</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#E8C87A"></div>Phase II</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#E87A30"></div>Phase I</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#E84040"></div>Preclinical</div>
+</div>
+
+<script>
+const isotopes = [
+  {
+    symbol: '<sup>223</sup>Ra',
+    name: 'Radium',
+    hl: '11.4 d',
+    status: 'Approved',
+    cls: 'green',
+    vector: 'Calcium mimetic — bone-seeking analogue',
+    indication: 'mCRPC with bone metastases, no visceral disease',
+    chain: '⁴ alpha emissions · residual γ photons → post-therapeutic SPECT feasible',
+    data: '<strong>ALSYMPCA (Phase 3):</strong> OS 14.9 vs 11.3 months · HR 0.70 · p&lt;0.001 · +3.6 months absolute gain · Delays symptomatic skeletal events',
+    note: 'ERA-223 setback (fracture signal with abiraterone). <strong>PEACE-3:</strong> enzalutamide combination, rPFS benefit at ESMO 2024. Only alpha emitter with clinical-grade post-therapeutic SPECT imaging.',
+    extra: 'The only alpha emitter with a positive Phase 3 OS result in solid oncology.',
+  },
+  {
+    symbol: '<sup>225</sup>Ac',
+    name: 'Actinium',
+    hl: '9.9 d',
+    status: 'Phase I/II',
+    cls: 'yellow',
+    vector: 'PSMA-617 / PSMA I&T',
+    indication: 'mCRPC — refractory to ¹⁷⁷Lu',
+    chain: '<strong>4 alpha particles per atom</strong> · cascade ²²¹Fr → ²¹⁷At → ²¹³Bi/²¹³Po → ²⁰⁹Bi · nuclear recoil releases mobile daughters',
+    data: '<strong>Compassionate series (Heidelberg, Pretoria, Mumbai, Beijing):</strong> PSA₅₀ 70–90% · <strong>Erasmus MC Phase 1:</strong> 9 pts · tumor dose 11.22 Gy/MBq · recommended Ph2 dose 10 MBq',
+    note: '<strong>Xerostomia 89%</strong> — salivary glands receive both ligand dose and mobile daughter dose (not measurable). SPECT/CT quantitative dosimetry not feasible. ²²⁵Ac + ¹⁷⁷Lu combination under evaluation.',
+    extra: 'Daughter redistribution: ²²¹Fr, ²¹³Bi deposit dose to kidneys, marrow and salivary glands beyond ligand targeting.',
+  },
+  {
+    symbol: '<sup>212</sup>Pb',
+    name: 'Lead',
+    hl: '10.6 h',
+    status: 'Phase II',
+    cls: 'yellow',
+    vector: 'DOTAMTATE (AlphaMedix™ — Sanofi)',
+    indication: 'GEP-NETs — including PRRT-exposed patients',
+    chain: '²¹²Pb → ²¹²Bi (alpha emitter) · Lead acts as <strong>in situ generator</strong> · therapeutic emitter released after tumor binding · T½ 10.6 h facilitates logistics',
+    data: '<strong>ALPHAMEDIX-02 (ESMO 2025):</strong> PRRT-naïve ORR 54.3% · PRRT-exposed (n=26): ORR 30.8% · <strong>DCR 96.2%</strong> · 7/8 responders still responding at data cutoff',
+    note: 'Toxicities to monitor: dysphagia/achalasia in a subset · late nephrotoxicity documented. <strong>Sanofi regulatory discussions underway · Phase 3 in preparation.</strong>',
+    extra: 'DCR 96.2% in PRRT-exposed population — the exact setting where alpha is expected to take over from beta.',
+  },
+  {
+    symbol: '<sup>211</sup>At',
+    name: 'Astatine',
+    hl: '7.2 h',
+    status: 'Phase I',
+    cls: 'orange',
+    vector: 'NaAt / anti-tenascin antibody',
+    indication: 'Refractory thyroid cancer · glioblastoma · ovarian cancer',
+    chain: '<strong>Single alpha emission per decay</strong> · no long cascade of mobile alpha daughters · radiobiologically the "cleanest" emitter in the field',
+    data: '<strong>Alpha-T1 (Osaka):</strong> Phase 1 completed 2025, results pending — NIS targeting as ¹³¹I, alpha potency · <strong>Ovarian (Sahlgrenska, n=12):</strong> intraperitoneal, MTD not reached · <strong>Glioblastoma (Duke, n=18):</strong> intracavitary post-resection',
+    note: '<strong>Primary bottleneck: infrastructure, not physics.</strong> Cyclotron production · demanding radiolabeling · T½ 7.2 h · logistics concentrated at very few sites. Industrializing chemistry and supply chain = prerequisite.',
+    extra: 'Astatine is a halogen — chemical analogue of iodine. Its simplest clinical form (NaAt) mirrors NaI, enabling straightforward NIS-targeting.',
+  },
+  {
+    symbol: '<sup>213</sup>Bi',
+    name: 'Bismuth',
+    hl: '45.6 min',
+    status: 'Clinical trials',
+    cls: 'orange',
+    vector: 'DOTA-peptides',
+    indication: 'Leukemia / NETs',
+    chain: 'Daughter of ²²⁵Ac decay chain · direct alpha emitter · <strong>T½ 45.6 min</strong> = major logistical constraint',
+    data: 'Early clinical experience in hematologic malignancies and NETs · limited data · very short half-life requires on-site production or generator-based delivery',
+    note: 'The extreme short half-life limits logistics to centers with on-site production. Often considered as a component of ²²⁵Ac therapy rather than a standalone agent.',
+    extra: 'Useful as a direct alpha emitter in settings where ²²⁵Ac cascade daughters are the actual therapeutic agent.',
+  },
+  {
+    symbol: '<sup>227</sup>Th',
+    name: 'Thorium',
+    hl: '18.7 d',
+    status: 'Phase I',
+    cls: 'orange',
+    vector: 'Antibody conjugates (BAY 2287411)',
+    indication: 'Breast cancer · prostate cancer',
+    chain: '²²⁷Th → ²²³Ra (itself an alpha emitter) · <strong>T½ 18.7 d</strong> = favorable logistics · antibody conjugate allows large-molecule targeting',
+    data: '<strong>Phase 1 trials ongoing</strong> in breast and prostate cancer · preliminary safety and biodistribution data · Bayer program',
+    note: 'Antibody conjugation opens targeting to tumor-associated antigens inaccessible to small molecules. Long T½ compatible with antibody pharmacokinetics (slow tumor accumulation).',
+    extra: 'Thorium-227 is the only strategic alpha emitter designed for antibody conjugate delivery — complementary to small-molecule PSMA/SSTR targeting.',
+  },
+  {
+    symbol: '<sup>149</sup>Tb',
+    name: 'Terbium',
+    hl: '4.1 h',
+    status: 'Preclinical',
+    cls: 'red',
+    vector: 'PSMA / DOTANOC (terbium constellation)',
+    indication: '— (preclinical stage)',
+    chain: 'Alpha emitter · <strong>T½ 4.1 h</strong> · member of the terbium constellation (¹⁵²Tb PET · ¹⁵⁵Tb SPECT · ¹⁶¹Tb β/Auger · ¹⁴⁹Tb α)',
+    data: 'Preclinical biodistribution data in ovarian and NET models · same DOTA chemistry as ¹⁶¹Tb · production requires particle accelerators with minimal availability',
+    note: '<strong>Terbium constellation:</strong> one vector (DOTA-PSMA or DOTA-TATE) labelable with 4 isotopes — PET imaging (¹⁵²Tb), SPECT dosimetry (¹⁵⁵Tb), beta/Auger therapy (¹⁶¹Tb), alpha therapy (¹⁴⁹Tb). Complete theranostic toolkit.',
+    extra: 'ISOLDE (CERN) and PSI (Switzerland) produce terbium isotopes. GMP feasibility demonstrated. Scalable industrialization remains the challenge.',
+  },
+];
+
+const row1 = document.getElementById('row1');
+const row2 = document.getElementById('row2');
+const detail = document.getElementById('detail');
+let activeIdx = null;
+
+isotopes.forEach((iso, i) => {
+  const card = document.createElement('div');
+  card.className = `card ${iso.cls}`;
+  card.innerHTML = `
+    <div class="isotope-symbol">${iso.symbol}</div>
+    <div class="element-name">${iso.name}</div>
+    <div class="half-life">${iso.hl}</div>
+    <span class="status-dot"></span><span class="status-label">${iso.status}</span>
+  `;
+  card.onclick = () => {
+    if (activeIdx === i) {
+      activeIdx = null;
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+      detail.className = 'detail-panel empty';
+      detail.innerHTML = '';
+      return;
+    }
+    activeIdx = i;
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    showDetail(iso);
+  };
+  if (i < 5) row1.appendChild(card);
+  else row2.appendChild(card);
+});
+
+function showDetail(iso) {
+  detail.className = 'detail-panel';
+  detail.innerHTML = `
+    <div class="detail-content">
+      <div class="detail-header">
+        <div class="detail-symbol">${iso.symbol}</div>
+        <div class="detail-meta">
+          <div class="detail-name">${iso.name}</div>
+          <div class="detail-hl">T½ ${iso.hl}</div>
+          <div class="detail-status ${iso.cls}">
+            <div class="legend-dot" style="background:${iso.cls === 'green' ? '#4CAF50' : iso.cls === 'yellow' ? '#E8C87A' : iso.cls === 'orange' ? '#E87A30' : '#E84040'}; width:8px; height:8px; border-radius:50%;"></div>
+            ${iso.status}
+          </div>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-block">
+          <div class="detail-block-label">Primary vector</div>
+          <div class="detail-block-text">${iso.vector}</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-label">Lead indication</div>
+          <div class="detail-block-text">${iso.indication}</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-label">Decay chain</div>
+          <div class="detail-block-text">${iso.chain}</div>
+        </div>
+        <div class="detail-block wide">
+          <div class="detail-block-label">Clinical data</div>
+          <div class="detail-block-text">${iso.data}</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-label">Key constraint / note</div>
+          <div class="detail-block-text">${iso.note}</div>
+        </div>
+        <div class="detail-block full">
+          <div class="detail-block-label">Take-home</div>
+          <div class="detail-block-text"><strong>${iso.extra}</strong></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
